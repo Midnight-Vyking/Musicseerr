@@ -260,7 +260,7 @@
 		<DegradedBanner />
 		<VersionOverlays bind:updateAvailable={versionUpdateAvailable} />
 
-		<div class="drawer drawer-open">
+		<div class="drawer sm:drawer-open">
 			<input id="main-drawer" type="checkbox" class="drawer-toggle" />
 
 			<div class="drawer-content flex flex-col">
@@ -270,7 +270,7 @@
 							<img src="/logo_wide.png" alt="Musicseerr" class="h-8" />
 						</a>
 					</div>
-					<div class="navbar-center grow px-4 justify-center">
+					<div class="navbar-center grow px-4 justify-center hidden sm:flex">
 						<div class="w-full max-w-2xl">
 							<SearchSuggestions
 								bind:query
@@ -280,14 +280,28 @@
 							/>
 						</div>
 					</div>
-					<div class="navbar-end w-auto pr-2">
+					<div class="navbar-end w-auto pr-2 flex items-center ml-auto">
 						<a href="/profile" class="btn btn-ghost btn-circle btn-md" aria-label="Profile">
 							<UserRound class="h-6 w-6" />
+						</a>
+						<a
+							href={versionUpdateAvailable ? '/settings?tab=about' : '/settings'}
+							class="btn btn-ghost btn-circle btn-md relative"
+							aria-label={versionUpdateAvailable ? 'Settings - update available' : 'Settings'}
+						>
+							<Settings class="h-6 w-6" />
+							{#if versionUpdateAvailable}
+								<span
+									class="absolute -top-0.5 -right-0.5 flex h-4.5 w-4.5 items-center justify-center rounded-full bg-accent text-accent-content shadow-sm shadow-accent/30"
+								>
+									<ArrowUpCircle class="h-3 w-3" />
+								</span>
+							{/if}
 						</a>
 					</div>
 				</div>
 
-				<div class="flex-1" class:pb-24={playerStore.isPlayerVisible}>
+				<div class="flex-1 {playerStore.isPlayerVisible ? 'pb-[154px] sm:pb-24' : 'pb-16 sm:pb-0'}">
 					{@render children()}
 				</div>
 			</div>
@@ -671,5 +685,98 @@
 		<BatchDownloadIndicator />
 		<DiscographyDownloadModal />
 		<AddToPlaylistModal bind:this={playlistModalRef} />
+
+		<nav
+			class="sm:hidden fixed left-0 right-0 z-40 bg-base-200/95 backdrop-blur-md border-t border-base-300 h-16 transition-[bottom] duration-300"
+			style="bottom: {playerStore.isPlayerVisible ? '90px' : '0px'}"
+			aria-label="Mobile navigation"
+		>
+			<div class="flex items-center justify-around h-full px-1">
+				<a
+					href="/"
+					aria-label="Home"
+					aria-current={isNavActive('/') ? 'page' : undefined}
+					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/') ? 'text-primary' : 'text-base-content/50'}"
+				>
+					<House class="h-5 w-5" />
+					<span class="text-[10px] font-medium">Home</span>
+				</a>
+
+				{#if lidarrConfigured}
+					<a
+						href="/requests"
+						aria-label="Requests"
+						aria-current={isNavActive('/requests') ? 'page' : undefined}
+						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/requests') ? 'text-primary' : 'text-base-content/50'}"
+					>
+						<div class="relative">
+							<Download class="h-5 w-5" />
+							{#if requestCountStore.count > 0}
+								<span
+									class="absolute -top-2 -right-1.5 badge badge-info badge-xs w-4 h-4 p-0 text-[10px] font-bold"
+									>{requestCountStore.count}</span
+								>
+							{/if}
+						</div>
+						<span class="text-[10px] font-medium">Requests</span>
+					</a>
+				{:else}
+					<span
+						aria-label="Requests"
+						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl opacity-25 cursor-not-allowed"
+					>
+						<Download class="h-5 w-5" />
+						<span class="text-[10px] font-medium">Requests</span>
+					</span>
+				{/if}
+
+				<button
+					onclick={() =>
+						(document.getElementById('search_modal') as HTMLDialogElement)?.showModal()}
+					aria-label="Search"
+					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors text-base-content/50"
+				>
+					<Search class="h-5 w-5" />
+					<span class="text-[10px] font-medium">Search</span>
+				</button>
+
+				<a
+					href="/discover"
+					aria-label="Discover"
+					aria-current={isNavActive('/discover') ? 'page' : undefined}
+					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/discover') ? 'text-primary' : 'text-base-content/50'}"
+				>
+					<Compass class="h-5 w-5" />
+					<span class="text-[10px] font-medium">Discover</span>
+				</a>
+
+				{#if lidarrConfigured}
+					<a
+						href="/library"
+						aria-label="Library"
+						aria-current={isNavActive('/library') ? 'page' : undefined}
+						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/library') ? 'text-primary' : 'text-base-content/50'}"
+					>
+						<div class="relative">
+							<Menu class="h-5 w-5" />
+							{#if syncStatus.isActive}
+								<span
+									class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-primary animate-pulse"
+								></span>
+							{/if}
+						</div>
+						<span class="text-[10px] font-medium">Library</span>
+					</a>
+				{:else}
+					<span
+						aria-label="Library"
+						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl opacity-25 cursor-not-allowed"
+					>
+						<Menu class="h-5 w-5" />
+						<span class="text-[10px] font-medium">Library</span>
+					</span>
+				{/if}
+			</div>
+		</nav>
 	</div>
 </QueryProvider>
