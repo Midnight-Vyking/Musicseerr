@@ -37,7 +37,9 @@
 		ArrowUpCircle,
 		Globe,
 		Home,
-		Compass
+		Compass,
+		ChevronLeft,
+		ChevronRight
 	} from 'lucide-svelte';
 	import JellyfinIcon from '$lib/components/JellyfinIcon.svelte';
 	import NavidromeIcon from '$lib/components/NavidromeIcon.svelte';
@@ -70,6 +72,7 @@
 	};
 
 	let activeTab = $state('settings');
+	let showContent = $state(false);
 
 	const tabs = [
 		{ id: 'settings', label: 'Release Preferences', group: 'Preferences', icon: Settings2 },
@@ -107,10 +110,16 @@
 		integrationStore.ensureLoaded();
 	});
 
+	function selectTab(tabId: string) {
+		activeTab = tabId;
+		showContent = true;
+	}
+
 	$effect(() => {
 		const tabParam = page.url.searchParams.get('tab');
 		if (tabParam && tabs.some((t) => t.id === tabParam)) {
 			activeTab = tabParam;
+			showContent = true;
 		}
 	});
 </script>
@@ -124,7 +133,7 @@
 
 		<div class="flex flex-col lg:flex-row gap-6">
 			<aside
-				class="w-full lg:w-80 space-y-4 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto"
+				class="w-full lg:w-80 space-y-4 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto {showContent ? 'hidden lg:block' : 'block'}"
 			>
 				{#each groups as group, i (`group-${i}`)}
 					<div class="bg-base-200 rounded-box p-2">
@@ -140,7 +149,7 @@
 									<button
 										class="text-base justify-start"
 										class:btn-active={activeTab === tab.id}
-										onclick={() => (activeTab = tab.id)}
+										onclick={() => selectTab(tab.id)}
 									>
 										<Icon class="w-5 h-5" />
 										<span>{tab.label}</span>
@@ -163,6 +172,7 @@
 												Update
 											</span>
 										{/if}
+										<ChevronRight class="w-4 h-4 ml-auto opacity-40 lg:hidden" />
 									</button>
 								</li>
 							{/each}
@@ -171,7 +181,15 @@
 				{/each}
 			</aside>
 
-			<main class="flex-1">
+			<main class="flex-1 {showContent ? 'block' : 'hidden lg:block'}">
+				<button
+					class="lg:hidden flex items-center gap-1 mb-4 text-sm text-base-content/60 hover:text-base-content transition-colors"
+					onclick={() => (showContent = false)}
+				>
+					<ChevronLeft class="w-4 h-4" />
+					Settings
+				</button>
+
 				{#if activeTab === 'settings'}
 					<SettingsPreferences />
 				{:else if activeTab === 'home'}

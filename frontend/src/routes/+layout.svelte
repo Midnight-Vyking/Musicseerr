@@ -696,9 +696,9 @@
 					href="/"
 					aria-label="Home"
 					aria-current={isNavActive('/') ? 'page' : undefined}
-					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/') ? 'text-primary' : 'text-base-content/50'}"
+					class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn transition-all hover:bg-base-content/10 {isNavActive('/') ? 'bg-base-content/10' : ''}"
 				>
-					<House class="h-5 w-5" />
+					<House class="h-6 w-6" />
 					<span class="text-[10px] font-medium">Home</span>
 				</a>
 
@@ -707,10 +707,10 @@
 						href="/requests"
 						aria-label="Requests"
 						aria-current={isNavActive('/requests') ? 'page' : undefined}
-						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/requests') ? 'text-primary' : 'text-base-content/50'}"
+						class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn transition-all hover:bg-base-content/10 {isNavActive('/requests') ? 'bg-base-content/10' : ''}"
 					>
 						<div class="relative">
-							<Download class="h-5 w-5" />
+							<Download class="h-6 w-6" />
 							{#if requestCountStore.count > 0}
 								<span
 									class="absolute -top-2 -right-1.5 badge badge-info badge-xs w-4 h-4 p-0 text-[10px] font-bold"
@@ -723,9 +723,9 @@
 				{:else}
 					<span
 						aria-label="Requests"
-						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl opacity-25 cursor-not-allowed"
+						class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn opacity-25 cursor-not-allowed"
 					>
-						<Download class="h-5 w-5" />
+						<Download class="h-6 w-6" />
 						<span class="text-[10px] font-medium">Requests</span>
 					</span>
 				{/if}
@@ -734,9 +734,9 @@
 					onclick={() =>
 						(document.getElementById('search_modal') as HTMLDialogElement)?.showModal()}
 					aria-label="Search"
-					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors text-base-content/50"
+					class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn transition-all hover:bg-base-content/10"
 				>
-					<Search class="h-5 w-5" />
+					<Search class="h-6 w-6" />
 					<span class="text-[10px] font-medium">Search</span>
 				</button>
 
@@ -744,9 +744,9 @@
 					href="/discover"
 					aria-label="Discover"
 					aria-current={isNavActive('/discover') ? 'page' : undefined}
-					class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/discover') ? 'text-primary' : 'text-base-content/50'}"
+					class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn transition-all hover:bg-base-content/10 {isNavActive('/discover') ? 'bg-base-content/10' : ''}"
 				>
-					<Compass class="h-5 w-5" />
+					<Compass class="h-6 w-6" />
 					<span class="text-[10px] font-medium">Discover</span>
 				</a>
 
@@ -755,10 +755,10 @@
 						href="/library"
 						aria-label="Library"
 						aria-current={isNavActive('/library') ? 'page' : undefined}
-						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl transition-colors {isNavActive('/library') ? 'text-primary' : 'text-base-content/50'}"
+						class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn transition-all hover:bg-base-content/10 {isNavActive('/library') ? 'bg-base-content/10' : ''}"
 					>
 						<div class="relative">
-							<Menu class="h-5 w-5" />
+							<Menu class="h-6 w-6" />
 							{#if syncStatus.isActive}
 								<span
 									class="absolute -top-0.5 -right-0.5 h-1.5 w-1.5 rounded-full bg-primary animate-pulse"
@@ -770,9 +770,9 @@
 				{:else}
 					<span
 						aria-label="Library"
-						class="flex flex-col items-center gap-0.5 px-4 py-2 rounded-xl opacity-25 cursor-not-allowed"
+						class="flex flex-col items-center gap-0.5 px-3 py-1.5 rounded-btn opacity-25 cursor-not-allowed"
 					>
-						<Menu class="h-5 w-5" />
+						<Menu class="h-6 w-6" />
 						<span class="text-[10px] font-medium">Library</span>
 					</span>
 				{/if}
