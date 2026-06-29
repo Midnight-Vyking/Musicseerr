@@ -343,7 +343,10 @@
 							</div>
 						</div>
 						<div class="navbar-end w-auto pr-1 sm:pr-2">
-							<ServiceHealthIndicator />
+						<ServiceHealthIndicator />
+							<a href="/downloads" class="btn btn-ghost btn-circle btn-md" aria-label="Downloads">
+								<Download class="h-6 w-6" />
+							</a>
 							<a href="/profile" class="btn btn-ghost btn-circle btn-md" aria-label="Profile">
 								{#if authStore.user?.avatar_url}
 									<img
@@ -712,63 +715,66 @@
 			{@render children()}
 		{/if}
 
-		<nav class="droppedneedle-bottom-nav md:hidden" aria-label="Primary navigation">
-			<a
-				href="/"
-				class="droppedneedle-bottom-nav__item"
-				class:active={currentPath === '/'}
-				aria-current={currentPath === '/' ? 'page' : undefined}
-			>
-				<House />
-				<span>Home</span>
-			</a>
-			<a
-				href="/discover"
-				class="droppedneedle-bottom-nav__item"
-				class:active={isNavActive('/discover')}
-				aria-current={isNavActive('/discover') ? 'page' : undefined}
-			>
-				<Compass />
-				<span>Discover</span>
-			</a>
-			<button
-				type="button"
-				class="droppedneedle-bottom-nav__item"
-				class:active={isNavActive('/search')}
-				onclick={() => (document.getElementById('search_modal') as HTMLDialogElement)?.showModal()}
-				aria-current={isNavActive('/search') ? 'page' : undefined}
-			>
-				<Search />
-				<span>Search</span>
-			</button>
-			<a
-				href="/library"
-				class="droppedneedle-bottom-nav__item"
-				class:active={isNavActive('/library')}
-				aria-current={isNavActive('/library') ? 'page' : undefined}
-			>
-				<Menu />
-				<span>Library</span>
-				{#if syncStatus.isActive || libraryScanActive}
-					<span class="droppedneedle-bottom-nav__badge" aria-label="Library sync in progress"
-					></span>
-				{/if}
-			</a>
-			<a
-				href={versionUpdateAvailable ? '/settings?tab=about' : '/settings'}
-				class="droppedneedle-bottom-nav__item"
-				class:active={isNavActive('/settings')}
-				aria-current={isNavActive('/settings') ? 'page' : undefined}
-			>
-				<Settings />
-				<span>Settings</span>
-				{#if versionUpdateAvailable}
-					<span class="droppedneedle-bottom-nav__badge" aria-label="Update available">
-						<ArrowUpCircle class="h-3 w-3" />
-					</span>
-				{/if}
-			</a>
-		</nav>
+		{#if showAppShell}
+			<nav class="droppedneedle-bottom-nav md:hidden" aria-label="Primary navigation">
+				<a
+					href="/"
+					class="droppedneedle-bottom-nav__item"
+					class:active={currentPath === '/'}
+					aria-current={currentPath === '/' ? 'page' : undefined}
+				>
+					<House />
+					<span>Home</span>
+				</a>
+				<a
+					href="/discover"
+					class="droppedneedle-bottom-nav__item"
+					class:active={isNavActive('/discover')}
+					aria-current={isNavActive('/discover') ? 'page' : undefined}
+				>
+					<Compass />
+					<span>Discover</span>
+				</a>
+				<button
+					type="button"
+					class="droppedneedle-bottom-nav__item"
+					class:active={isNavActive('/search')}
+					onclick={() =>
+						(document.getElementById('search_modal') as HTMLDialogElement)?.showModal()}
+					aria-current={isNavActive('/search') ? 'page' : undefined}
+				>
+					<Search />
+					<span>Search</span>
+				</button>
+				<a
+					href="/library"
+					class="droppedneedle-bottom-nav__item"
+					class:active={isNavActive('/library')}
+					aria-current={isNavActive('/library') ? 'page' : undefined}
+				>
+					<Menu />
+					<span>Library</span>
+					{#if syncStatus.isActive || libraryScanActive}
+						<span class="droppedneedle-bottom-nav__badge" aria-label="Library sync in progress"
+						></span>
+					{/if}
+				</a>
+				<a
+					href={versionUpdateAvailable ? '/settings?tab=about' : '/settings'}
+					class="droppedneedle-bottom-nav__item"
+					class:active={isNavActive('/settings')}
+					aria-current={isNavActive('/settings') ? 'page' : undefined}
+				>
+					<Settings />
+					<span>Settings</span>
+					{#if versionUpdateAvailable}
+						<span class="droppedneedle-bottom-nav__badge" aria-label="Update available">
+							<ArrowUpCircle class="h-3 w-3" />
+						</span>
+					{/if}
+				</a>
+			</nav>
+		{/if}
 
 		<dialog id="search_modal" class="modal">
 			<div class="modal-box overflow-visible">

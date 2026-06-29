@@ -75,6 +75,7 @@
 	};
 
 	let activeTab = $state('library');
+	let activeTier = $state('setup');
 	let filter = $state('');
 
 	const tiers = [
@@ -163,8 +164,53 @@
 		</div>
 
 		<div class="flex flex-col lg:flex-row gap-6">
+			<!-- Mobile: 3-tier category tabs -->
+			<nav class="lg:hidden -mx-4 px-4 space-y-3" aria-label="Settings categories">
+				<div class="flex gap-2">
+					{#each tiers as tier (tier.id)}
+						{@const isActive = activeTier === tier.id}
+						<button
+							class="flex-1 rounded-lg px-3 py-2 text-xs font-semibold transition-colors {isActive
+								? 'bg-primary/15 text-primary'
+								: 'bg-base-200/50 text-base-content/50'}"
+							onclick={() => (activeTier = tier.id)}
+						>
+							{tier.label}
+						</button>
+					{/each}
+				</div>
+				<div class="rounded-2xl border border-base-content/8 bg-base-200/30 p-2">
+					<div class="grid grid-cols-2 gap-1.5">
+						{#each tabsForTier(activeTier) as tab (tab.id)}
+						{@const Icon = tab.icon}
+						{@const isActive = activeTab === tab.id}
+						<button
+							class="flex items-center gap-1.5 rounded-lg px-2.5 py-2 text-xs font-medium border transition-colors {isActive
+								? 'border-primary/40 bg-primary/10 text-primary'
+								: 'border-base-content/10 bg-base-200/50 text-base-content/60 hover:border-base-content/20'}"
+							onclick={() => selectTab(tab.id)}
+						>
+							<Icon class="h-3.5 w-3.5 shrink-0" />
+							<span class="truncate">{tab.label}</span>
+							{#if tab.id in connectionMap}
+								{@const storeKey = connectionMap[tab.id]}
+								{@const connected = integration.current[storeKey]}
+								<span
+									class="ml-auto h-2 w-2 shrink-0 rounded-full {connected
+										? 'bg-success ring-2 ring-success/30'
+										: 'bg-base-content/20'}"
+								>
+								</span>
+							{/if}
+						</button>
+					{/each}
+				</div>
+				</div>
+			</nav>
+
+			<!-- Desktop: sidebar -->
 			<aside
-				class="scrollbar-hide w-full lg:w-80 lg:shrink-0 space-y-3 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto"
+				class="scrollbar-hide hidden lg:block w-60 lg:shrink-0 space-y-3 lg:sticky lg:top-20 lg:self-start lg:max-h-[calc(100vh-6rem)] lg:overflow-y-auto"
 			>
 				<label class="relative block">
 					<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-base-content/40" />

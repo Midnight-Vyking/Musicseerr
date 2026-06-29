@@ -249,6 +249,24 @@
 					</button>
 				</div>
 
+				<div class="flex items-center gap-1.5 sm:hidden">
+					<span class="text-[10px] opacity-60 tabular-nums">{formatTime(playerStore.progress)}</span
+					>
+					<input
+						type="range"
+						class="range range-xs range-accent w-24"
+						class:opacity-50={!playerStore.isSeekable}
+						class:cursor-not-allowed={!playerStore.isSeekable}
+						min="0"
+						max={playerStore.duration || 1}
+						value={playerStore.progress}
+						disabled={!playerStore.isSeekable}
+						oninput={handleSeek}
+					/>
+					<span class="text-[10px] opacity-60 tabular-nums">{formatTime(playerStore.duration)}</span
+					>
+				</div>
+
 				<div class="hidden sm:flex items-center gap-2 w-full max-w-lg">
 					<span class="text-xs opacity-60 w-10 text-right tabular-nums"
 						>{formatTime(playerStore.progress)}</span

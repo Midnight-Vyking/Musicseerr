@@ -8,8 +8,6 @@
 		HardDrive,
 		Layers
 	} from 'lucide-svelte';
-	import { onMount } from 'svelte';
-	import { fromStore } from 'svelte/store';
 	import {
 		getLibraryStatsQuery,
 		getLibrarySettingsQuery
@@ -18,21 +16,13 @@
 	import LibraryScanButton from './LibraryScanButton.svelte';
 	import LibraryControlsCard from './LibraryControlsCard.svelte';
 	import LibrarySearch from './LibrarySearch.svelte';
-	import LocalFilesBand from './LocalFilesBand.svelte';
 	import LibraryHubTiles from './LibraryHubTiles.svelte';
 	import EmptyState from '$lib/components/EmptyState.svelte';
 	import { authStore } from '$lib/stores/authStore.svelte';
-	import { integrationStore } from '$lib/stores/integration';
 	import { formatBytes, formatLastUpdated } from '$lib/utils/formatting';
 
 	const statsQuery = getLibraryStatsQuery();
 	const settingsQuery = getLibrarySettingsQuery(() => authStore.isAdmin);
-
-	const integrations = fromStore(integrationStore);
-	const localEnabled = $derived(integrations.current.localfiles);
-	onMount(() => {
-		integrationStore.ensureLoaded();
-	});
 
 	const stats = $derived(statsQuery.data);
 	const isEmpty = $derived(!!stats && stats.total_albums === 0);
@@ -123,10 +113,6 @@
 			{/if}
 		</div>
 	</div>
-
-	{#if localEnabled}
-		<LocalFilesBand />
-	{/if}
 
 	{#if authStore.isAdmin}
 		<div id="library-controls" class="scroll-mt-20">

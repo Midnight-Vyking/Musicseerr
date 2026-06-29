@@ -23,30 +23,39 @@
 </script>
 
 <section class="my-10">
-	<div class="mb-4 flex items-center gap-3">
-		<div class="flex items-center gap-2">
-			<Sparkles class="h-5 w-5 text-warning" />
-			<h2 class="text-lg font-bold text-base-content">Weekly Exploration</h2>
+	<div class="mb-4">
+		<div class="flex items-center justify-between gap-3">
+			<div class="flex items-center gap-2 sm:gap-3 flex-wrap min-w-0">
+				<div class="flex items-center gap-2">
+					<Sparkles class="h-5 w-5 text-warning shrink-0" />
+					<h2 class="text-lg font-bold text-base-content">Weekly Exploration</h2>
+				</div>
+				{#if formattedDate}
+					<span class="hidden sm:inline text-xs text-base-content/40 whitespace-nowrap">
+						{formattedDate}
+					</span>
+				{/if}
+			</div>
+
+			{#if section.source_url}
+				<a
+					href={section.source_url}
+					target="_blank"
+					rel="noopener noreferrer"
+					class="flex items-center gap-1 text-xs text-base-content/40
+						hover:text-primary transition-colors shrink-0"
+					title="View on ListenBrainz"
+				>
+					ListenBrainz
+					<ExternalLink class="h-3 w-3" />
+				</a>
+			{/if}
 		</div>
 
 		{#if formattedDate}
-			<span class="badge badge-ghost badge-sm text-base-content/50">
+			<span class="sm:hidden text-xs text-base-content/40">
 				{formattedDate}
 			</span>
-		{/if}
-
-		{#if section.source_url}
-			<a
-				href={section.source_url}
-				target="_blank"
-				rel="noopener noreferrer"
-				class="ml-auto flex items-center gap-1 text-xs text-base-content/40
-					hover:text-primary transition-colors"
-				title="View on ListenBrainz"
-			>
-				ListenBrainz
-				<ExternalLink class="h-3 w-3" />
-			</a>
 		{/if}
 	</div>
 

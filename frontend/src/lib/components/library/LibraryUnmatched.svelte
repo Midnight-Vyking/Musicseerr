@@ -42,10 +42,10 @@
 			? ''
 			: 's'} need attributing.
 	</div>
-	<div class="grid gap-3 sm:grid-cols-2">
+	<div class="grid gap-3 sm:gap-4 md:grid-cols-2">
 		{#each groups as group (group.folder)}
 			<button
-				class="group flex items-start gap-3 rounded-box border border-base-300 bg-base-200 p-4 text-left transition-colors hover:border-primary/40 hover:bg-base-300/60"
+				class="group flex min-w-0 items-start gap-3 overflow-hidden rounded-box border border-base-300 bg-base-200 p-4 text-left transition-colors hover:border-primary/40 hover:bg-base-300/60"
 				onclick={() => (active = group)}
 			>
 				<div

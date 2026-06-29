@@ -21,6 +21,7 @@
 	import CarouselSkeleton from '$lib/components/CarouselSkeleton.svelte';
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import { getGreeting } from '$lib/utils/homeCache';
+	import { removeQueueCachedData } from '$lib/utils/discoverQueueCache';
 	import { isDismissed } from '$lib/utils/dismissedPrompts';
 	import HomeSectionNowPlaying from '$lib/components/HomeSectionNowPlaying.svelte';
 	import HomeEntryCards from '$lib/components/HomeEntryCards.svelte';
@@ -152,31 +153,15 @@
 </svelte:head>
 
 <div class="min-h-[calc(100vh-200px)]">
-	<PageHeader
-		subtitle="Discover music, explore your library, and find new favorites."
+	<HomeEntryCards
 		{loading}
-		isUpdating={isUpdating || !!homeData?.refreshing}
+		refreshing={isUpdating}
 		{lastUpdated}
-	>
-		{#snippet title()}
-			<Music class="inline h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 mr-2 align-text-bottom" />
-			{getGreeting()}
-		{/snippet}
-	</PageHeader>
+		onRefresh={() => homeQuery.refetch()}
+	/>
 
-	<div class="flex justify-end px-4 -mt-4 mb-4 sm:px-6 lg:px-8">
-		<a
-			href="/settings?tab=home"
-			class="btn btn-ghost btn-sm gap-2 text-base-content/60 hover:text-base-content"
-			title="Choose which sections appear here"
-		>
-			<SlidersHorizontal class="h-4 w-4" />
-			<span class="hidden sm:inline">Customise</span>
-		</a>
-	</div>
-
-	<div class="mb-10 px-4 sm:mb-12 sm:px-6 lg:px-8">
-		<HomeEntryCards />
+	<div class="flex justify-start px-4 -mt-1 mb-6 sm:justify-end sm:px-6 sm:-mt-2 sm:mb-8 lg:px-8">
+		<SimpleSourceSwitcher currentSource={validSource} onSourceChange={handleSourceChange} />
 	</div>
 
 	{#if homeQuery.error && !homeData}
@@ -186,10 +171,7 @@
 			<button class="btn btn-primary mt-4" onclick={() => homeQuery.refetch()}>Try Again</button>
 		</div>
 	{:else}
-		<div
-			class="space-y-10 px-4 sm:space-y-12 sm:px-6 lg:px-8"
-			class:is-refreshing={homeData?.refreshing}
-		>
+		<div class="space-y-8 px-4 sm:space-y-12 sm:px-6 lg:px-8">
 			{#if !downloadClientConfigured && downloadClientPrompt}
 				<div
 					class="card bg-linear-to-br from-accent/20 via-accent/10 to-base-200 border-2 border-accent/40 shadow-xl relative overflow-hidden"

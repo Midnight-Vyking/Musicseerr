@@ -65,7 +65,31 @@
 	let quarantineOpen = $state(false);
 </script>
 
-<div class="space-y-7">
+<div class="space-y-4">
+	<div
+		role="tablist"
+		class="relative border-b border-base-content/10"
+		aria-label="Download queue tabs"
+	>
+		<div class="flex overflow-x-auto scrollbar-hide gap-1 -mx-2 px-2 pb-2">
+			{#each tabDefs as t (t.key)}
+				<button
+					role="tab"
+					aria-selected={activeTab === t.key}
+					class="dl-tab shrink-0"
+					class:dl-tab-active={activeTab === t.key}
+					onclick={() => (activeTab = t.key)}
+				>
+				{t.label}
+				<span class="badge badge-ghost badge-sm ml-1 tabular-nums">{counts[t.key]}</span>
+			</button>
+		{/each}
+		</div>
+		<div
+			aria-hidden="true"
+			class="pointer-events-none absolute right-0 top-0 bottom-0 w-12 bg-gradient-to-l from-base-100 via-base-100/70 to-transparent"
+		></div>
+	</div>
 	{#if query.isLoading}
 		<div class="space-y-3">
 			<div class="skeleton h-32 w-full rounded-3xl"></div>

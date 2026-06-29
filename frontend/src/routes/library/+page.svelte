@@ -1,8 +1,14 @@
 <script lang="ts">
 	import PageHeader from '$lib/components/PageHeader.svelte';
 	import LibraryDashboard from '$lib/components/library/LibraryDashboard.svelte';
+	import LibraryQuickActions from '$lib/components/library/LibraryQuickActions.svelte';
 	import { authStore } from '$lib/stores/authStore.svelte';
-	import { Headphones, SlidersHorizontal, Waypoints, X } from 'lucide-svelte';
+	import { Headphones, SlidersHorizontal, Waypoints, X, ArrowRight } from 'lucide-svelte';
+	import { integrationStore } from '$lib/stores/integration';
+	import { fromStore } from 'svelte/store';
+
+	const integrations = fromStore(integrationStore);
+	const localEnabled = $derived(integrations.current.localfiles);
 
 	const CONNECT_APPS_HREF = '/settings?tab=connect-apps';
 	const BANNER_KEY = 'droppedneedle_connect_apps_banner_dismissed';
@@ -33,36 +39,45 @@
 
 <div class="min-h-[calc(100vh-200px)]">
 	<PageHeader subtitle="Your scanned music library">
-		{#snippet title()}Library{/snippet}
+		{#snippet title()}<span class="whitespace-nowrap">Library</span>{/snippet}
 		{#snippet actions()}
-			<a
-				href="/library/local"
-				class="group btn btn-sm gap-2 rounded-full border-0 bg-primary text-primary-content shadow-lg shadow-primary/25 transition-all duration-200 hover:-translate-y-0.5 hover:shadow-primary/40 sm:btn-md"
-			>
-				<Headphones class="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-				<span>Listen</span>
-			</a>
-			<a
-				href={CONNECT_APPS_HREF}
-				class="group btn btn-sm gap-2 rounded-full border border-base-content/15 bg-base-100/50 text-base-content backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-base-100/80 sm:btn-md"
-			>
-				<Waypoints class="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
-				<span>Connect Apps</span>
-			</a>
-			{#if authStore.isAdmin}
-				<button
-					onclick={scrollToControls}
-					class="group btn btn-sm gap-2 rounded-full border border-base-content/15 bg-base-100/50 text-base-content backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-base-100/80 sm:btn-md"
+			<div class="flex flex-wrap items-center gap-2 justify-end">
+				{#if localEnabled}
+					<a
+						href="/library/local"
+						class="group/drop group btn btn-sm gap-2 rounded-full border-0 text-base-100 shadow-lg transition-all duration-200 hover:-translate-y-0.5 hover:shadow-xl sm:btn-md"
+						style="background: rgb(var(--brand-localfiles));"
+					>
+						<Headphones class="h-4 w-4 transition-transform duration-200 group-hover/drop:scale-110" />
+						<span class="group-hover/drop:hidden text-xs font-semibold">Drop the Needle!</span>
+						<span class="hidden group-hover/drop:inline text-xs">
+							Enter the <span class="font-black">Listening Room</span>
+						</span>
+						<ArrowRight class="h-3.5 w-3.5 transition-transform group-hover/drop:translate-x-0.5" />
+					</a>
+				{/if}
+				<a
+					href={CONNECT_APPS_HREF}
+					class="group btn btn-sm gap-2 rounded-full border border-base-content/15 bg-base-100/50 text-base-content backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-accent/40 hover:bg-base-100/80 sm:btn-md"
 				>
-					<SlidersHorizontal
-						class="h-4 w-4 transition-transform duration-200 group-hover:rotate-12"
-					/>
-					<span>Controls</span>
-				</button>
-			{/if}
+					<Waypoints class="h-4 w-4 transition-transform duration-200 group-hover:scale-110" />
+					<span>Connect Apps</span>
+				</a>
+				{#if authStore.isAdmin}
+					<button
+						onclick={scrollToControls}
+						class="group btn btn-sm gap-2 rounded-full border border-base-content/15 bg-base-100/50 text-base-content backdrop-blur transition-all duration-200 hover:-translate-y-0.5 hover:border-primary/40 hover:bg-base-100/80 sm:btn-md"
+					>
+						<SlidersHorizontal
+							class="h-4 w-4 transition-transform duration-200 group-hover:rotate-12"
+						/>
+						<span>Controls</span>
+					</button>
+				{/if}
+			</div>
 		{/snippet}
 	</PageHeader>
-	<div class="space-y-10 px-4 pb-12 sm:space-y-12 sm:px-6 lg:px-8">
+	<div class="space-y-8 px-4 pb-12 sm:space-y-12 sm:px-6 lg:px-8">
 		{#if !bannerDismissed}
 			<div
 				class="flex items-center gap-3 rounded-box border border-accent/25 bg-base-200 p-4"
@@ -84,6 +99,9 @@
 					<X class="h-4 w-4" aria-hidden="true" />
 				</button>
 			</div>
+		{/if}
+		{#if localEnabled}
+			<LibraryQuickActions />
 		{/if}
 		<LibraryDashboard />
 	</div>

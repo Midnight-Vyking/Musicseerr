@@ -277,7 +277,7 @@
 	--ms-safe-bottom: env(safe-area-inset-bottom, 0px);
 	--ms-bottom-nav-height: 4.75rem;
 	--ms-bottom-nav-offset: calc(var(--ms-bottom-nav-height) + var(--ms-safe-bottom));
-	--ms-player-height: 5.75rem;
+	--ms-player-height: 6.25rem;
 	--ms-page-bottom-gap: 1rem;
 }
 
@@ -426,13 +426,21 @@ textarea {
 	min-height: 3.5rem;
 	align-items: center;
 	justify-content: center;
-	gap: 0.2rem;
+	flex-direction: column;
+	gap: 0.25rem;
 	border-radius: 0.75rem;
 	color: oklch(from var(--color-base-content) l c h / 0.62);
 	font-size: 0.6875rem;
 	font-weight: 700;
 	line-height: 1.05;
 	text-align: center;
+}
+
+.droppedneedle-bottom-nav__item span:not(.droppedneedle-bottom-nav__badge) {
+	max-width: 100%;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
 }
 
 .droppedneedle-bottom-nav__item svg {
@@ -481,7 +489,7 @@ textarea {
 @media (max-width: 420px) {
 	:root {
 		--ms-bottom-nav-height: 4.4rem;
-		--ms-player-height: 5.25rem;
+		--ms-player-height: 6rem;
 	}
 
 	.droppedneedle-bottom-nav {

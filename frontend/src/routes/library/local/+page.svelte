@@ -395,12 +395,12 @@
 					<h2 class="text-lg font-bold">By Decade</h2>
 				</div>
 
-				<div class="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
+				<HorizontalCarousel>
 					{#each decades as shelfData (shelfData.decade)}
 						{@const active = openDecade === shelfData.decade}
 						{@const face = shelfData.albums[0]}
 						<button
-							class="decade-card group relative aspect-[4/3] overflow-hidden rounded-2xl border p-4 text-left {active
+							class="decade-card group relative w-36 sm:w-44 aspect-[4/3] shrink-0 overflow-hidden rounded-2xl border p-4 text-left {active
 								? 'border-accent/60 ring-1 ring-accent/40'
 								: 'border-base-content/10 bg-base-200/40'}"
 							onclick={() => (openDecade = active ? null : shelfData.decade)}
@@ -430,7 +430,7 @@
 							</div>
 						</button>
 					{/each}
-				</div>
+				</HorizontalCarousel>
 
 				{#if openShelf}
 					<div

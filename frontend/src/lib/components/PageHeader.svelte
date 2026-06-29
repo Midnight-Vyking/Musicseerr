@@ -48,11 +48,11 @@
 	<div
 		class="absolute left-0 top-1/2 -translate-y-1/2 w-96 h-48 rounded-full bg-primary/10 blur-3xl pointer-events-none"
 	></div>
-	<div class="relative px-4 py-8 sm:px-6 sm:py-12 lg:px-8">
-		<div class="flex items-start justify-between">
-			<div>
+	<div class="relative px-4 py-4 sm:px-6 sm:py-10 lg:py-12 lg:px-8">
+		<div class="flex items-start justify-between gap-2 sm:gap-3">
+			<div class="min-w-0">
 				{#if breadcrumbs.length}
-					<nav class="mb-2 flex items-center gap-1 text-xs text-base-content/60">
+					<nav class="mb-1 flex items-center gap-1 text-xs text-base-content/60 sm:mb-2">
 						{#each breadcrumbs as crumb, i (crumb.label)}
 							{#if crumb.href}
 								<a href={crumb.href} class="link link-hover">{crumb.label}</a>
@@ -63,14 +63,14 @@
 						{/each}
 					</nav>
 				{/if}
-				<h1 class="mb-2 text-3xl font-bold sm:text-4xl lg:text-5xl">
+				<h1 class="mb-1 text-2xl font-bold leading-tight break-words sm:text-4xl lg:text-5xl">
 					{@render title()}
 				</h1>
-				<p class="max-w-xl text-sm text-base-content/70 sm:text-base">
+				<p class="max-w-xl text-xs leading-relaxed text-base-content/60 sm:text-base sm:text-base-content/70">
 					{subtitle}
 				</p>
 			</div>
-			<div class="flex items-center gap-2">
+			<div class="flex items-center gap-2 self-start sm:self-auto">
 				{#if actions}
 					{@render actions()}
 				{:else}

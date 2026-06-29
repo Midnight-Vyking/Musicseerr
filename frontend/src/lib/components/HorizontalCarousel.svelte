@@ -78,4 +78,9 @@
 			<ChevronRight class="w-5 h-5" />
 		</button>
 	{/if}
+
+	<div
+		aria-hidden="true"
+		class="pointer-events-none absolute -right-4 top-0 bottom-0 w-18 bg-gradient-to-l from-base-100 via-base-100/80 to-transparent sm:hidden"
+	></div>
 </div>
