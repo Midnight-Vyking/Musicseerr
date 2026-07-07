@@ -5,8 +5,7 @@
 		CircleAlert,
 		TrendingUp,
 		Sparkles,
-		Library,
-		SlidersHorizontal
+		Library
 	} from 'lucide-svelte';
 	import HomeSection from '$lib/components/HomeSection.svelte';
 	import WeeklyExploration from '$lib/components/WeeklyExploration.svelte';
@@ -19,9 +18,6 @@
 		WeeklyExplorationSection as WeeklyExplorationSectionType
 	} from '$lib/types';
 	import CarouselSkeleton from '$lib/components/CarouselSkeleton.svelte';
-	import PageHeader from '$lib/components/PageHeader.svelte';
-	import { getGreeting } from '$lib/utils/homeCache';
-	import { removeQueueCachedData } from '$lib/utils/discoverQueueCache';
 	import { isDismissed } from '$lib/utils/dismissedPrompts';
 	import HomeSectionNowPlaying from '$lib/components/HomeSectionNowPlaying.svelte';
 	import HomeEntryCards from '$lib/components/HomeEntryCards.svelte';
@@ -160,9 +156,6 @@
 		onRefresh={() => homeQuery.refetch()}
 	/>
 
-	<div class="flex justify-start px-4 -mt-1 mb-6 sm:justify-end sm:px-6 sm:-mt-2 sm:mb-8 lg:px-8">
-		<SimpleSourceSwitcher currentSource={validSource} onSourceChange={handleSourceChange} />
-	</div>
 
 	{#if homeQuery.error && !homeData}
 		<div class="mt-16 flex flex-col items-center justify-center px-4">

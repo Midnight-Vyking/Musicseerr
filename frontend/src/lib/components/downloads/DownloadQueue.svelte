@@ -10,7 +10,7 @@
 	import { getDownloadsQuery } from '$lib/queries/downloads/DownloadQueries.svelte';
 	import { getHeldImportsQuery } from '$lib/queries/downloads/HeldQueries.svelte';
 	import { getQuarantineQuery } from '$lib/queries/downloads/QuarantineQueries.svelte';
-	import { bucketSections, collapseRetryChains } from '$lib/queries/downloads/downloadStatus';
+	import { bucketDownloads, bucketSections, collapseRetryChains, type DownloadTab } from '$lib/queries/downloads/downloadStatus';
 	import { authStore } from '$lib/stores/authStore.svelte';
 
 	import DownloadItem from './DownloadItem.svelte';
@@ -33,6 +33,24 @@
 	// the dashboard's stacked sections
 	const tasks = $derived(collapseRetryChains(query.data?.items ?? []));
 	const sections = $derived(bucketSections(tasks));
+
+	// Tab state — buckets by status for the tab bar
+	let activeTab = $state<DownloadTab>('active');
+	const rawBuckets = $derived(bucketDownloads(tasks));
+	const counts = $derived({
+		active: rawBuckets.active.length,
+		review: rawBuckets.review.length,
+		completed: rawBuckets.completed.length,
+		failed: rawBuckets.failed.length,
+		quarantine: quarantineQuery.data?.items.length ?? 0
+	});
+	const tabDefs = $derived<{ key: DownloadTab; label: string }[]>(([
+		{ key: 'active' as DownloadTab, label: 'Active' },
+		{ key: 'review' as DownloadTab, label: 'Review' },
+		{ key: 'completed' as DownloadTab, label: 'Completed' },
+		{ key: 'failed' as DownloadTab, label: 'Failed' },
+		...(isAdmin ? [{ key: 'quarantine' as DownloadTab, label: 'Quarantine' }] : [])
+	]));
 
 	const hero = $derived(sections.now_spinning[0] ?? null);
 	const spinningRest = $derived(sections.now_spinning.slice(1));
