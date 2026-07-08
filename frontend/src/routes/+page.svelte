@@ -164,7 +164,7 @@
 			<button class="btn btn-primary mt-4" onclick={() => homeQuery.refetch()}>Try Again</button>
 		</div>
 	{:else}
-		<div class="space-y-8 px-4 sm:space-y-12 sm:px-6 lg:px-8">
+		<div class="relative z-0 space-y-8 px-4 sm:space-y-12 sm:px-6 lg:px-8">
 			{#if !downloadClientConfigured && downloadClientPrompt}
 				<div
 					class="card bg-linear-to-br from-accent/20 via-accent/10 to-base-200 border-2 border-accent/40 shadow-xl relative overflow-hidden"
@@ -207,6 +207,12 @@
 					<CarouselSkeleton />
 				</section>
 			{:else}
+				{#if !loading || homeData}
+					<div class="discover-section-enter mt-5 mb-0">
+						<DiscoverTeaserBand preview={homeData?.discover_preview ?? null} />
+					</div>
+				{/if}
+
 				{#if whatsHotBlocks.length > 0}
 					<div>
 						<SectionDivider label="What's Hot">
@@ -227,12 +233,6 @@
 								</div>
 							{/each}
 						</div>
-					</div>
-				{/if}
-
-				{#if !loading || homeData}
-					<div class="discover-section-enter">
-						<DiscoverTeaserBand preview={homeData?.discover_preview ?? null} />
 					</div>
 				{/if}
 

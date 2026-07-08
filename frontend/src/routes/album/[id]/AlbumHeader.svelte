@@ -281,7 +281,7 @@
 				<RefreshCw class="h-5 w-5 {refreshing ? 'animate-spin' : ''}" />
 			</button>
 		{/if}
-		<div class="w-full lg:w-64 xl:w-80 flex-shrink-0">
+		<div class="w-full max-w-xs sm:max-w-sm lg:w-64 xl:w-80 flex-shrink-0">
 			<AlbumImage
 				mbid={album.musicbrainz_id}
 				customUrl={album.cover_url}

@@ -152,7 +152,7 @@
 			{/each}
 		</div>
 	{:else}
-		<HorizontalCarousel class="-mx-4 px-4 sm:mx-0 sm:px-0 pb-2">
+		<HorizontalCarousel class="-mx-4 px-4 sm:mx-0 sm:px-0 pt-2.5 pb-2">
 			{#each section.items as item, i (`${item.name}-${i}`)}
 				{#if isArtist(item)}
 					{@const artistHref = artistHrefOrNull(item.mbid)}
@@ -162,7 +162,7 @@
 							href={artistHref ?? undefined}
 							data-sveltekit-preload-data={artistHref ? 'hover' : undefined}
 							class="card bg-base-100 w-full shadow-sm transition-all {artistHref
-								? 'cursor-pointer hover:scale-105 active:scale-95 hover:glow-primary'
+								? 'cursor-pointer hover:scale-105 hover:z-10 hover:relative active:scale-95 hover:glow-primary'
 								: 'cursor-default opacity-80'}"
 						>
 							<figure class="flex justify-center pt-4 relative">
@@ -197,7 +197,7 @@
 							this={albumHref ? 'a' : 'div'}
 							href={albumHref ?? undefined}
 							class="card bg-base-100 w-full shadow-sm transition-all group {albumHref
-								? 'cursor-pointer hover:scale-105 active:scale-95 hover:glow-primary'
+								? 'cursor-pointer hover:scale-105 hover:z-10 hover:relative active:scale-95 hover:glow-primary'
 								: 'cursor-default opacity-90'}"
 						>
 							<figure class="aspect-square overflow-hidden relative">
@@ -275,7 +275,7 @@
 							this={trackArtistHref ? 'a' : 'div'}
 							href={trackArtistHref ?? undefined}
 							class="card card-side bg-base-100 w-full shadow-sm transition-all {trackArtistHref
-								? 'cursor-pointer hover:glow-primary active:scale-95'
+								? 'cursor-pointer hover:glow-primary hover:z-10 hover:relative active:scale-95'
 								: 'cursor-default opacity-90'}"
 						>
 							<figure class="w-16 h-16 shrink-0">

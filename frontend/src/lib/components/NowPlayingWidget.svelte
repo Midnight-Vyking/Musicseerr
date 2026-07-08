@@ -32,7 +32,7 @@
 </script>
 
 {#if sessions.length > 0}
-	<section class="space-y-3">
+	<section class="space-y-3 my-5">
 		<div class="flex items-center gap-2 px-1">
 			<div class="now-playing-bars">
 				<span></span><span></span><span></span>

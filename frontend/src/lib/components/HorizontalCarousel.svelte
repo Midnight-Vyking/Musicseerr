@@ -64,7 +64,7 @@
 	<div
 		bind:this={container}
 		onscroll={updateArrows}
-		class="flex gap-4 overflow-x-auto overflow-y-hidden pb-8 -mb-8 scrollbar-hide snap-x snap-mandatory scroll-pl-4 [&>*]:snap-start {className}"
+		class="flex gap-4 overflow-x-auto overflow-y-hidden pb-8 -mb-8 scrollbar-hide snap-x snap-mandatory pl-4 scroll-pl-6 [&>*]:snap-start {className}"
 	>
 		{@render children()}
 	</div>

@@ -116,10 +116,7 @@
 						<Library class="h-5 w-5 text-primary sm:h-6 sm:w-6" />
 					</div>
 					<div class="min-w-0">
-						<h1 class="text-lg font-bold leading-tight sm:text-xl">Your Library</h1>
-						<p class="text-xs text-base-content/50 sm:text-sm">
-							{hasAnyStats ? `${totalTracks} tracks · ${totalArtists} artists · ${totalAlbums} albums` : 'Browse, scan & organise'}
-						</p>
+						<h1 class="text-3xl font-bold leading-tight sm:text-4xl">Your Library</h1>
 					</div>
 				</div>
 
@@ -183,7 +180,11 @@
 							{footerText}
 						</span>
 					{/if}
-					<span class="shrink-0 text-xs font-semibold text-primary">Open Library</span>
+					<div class="flex items-center gap-3">
+						<a href="/following" class="sm:hidden shrink-0 text-xs font-semibold text-base-content/60">Following</a>
+						<a href="/playlists" class="sm:hidden shrink-0 text-xs font-semibold text-base-content/60">Playlists</a>
+						<span class="shrink-0 text-xs font-semibold text-primary">Open Library</span>
+					</div>
 				</div>
 			{:else}
 				{@const isError = cardState === 'error'}

@@ -344,6 +344,11 @@
 						</div>
 						<div class="navbar-end w-auto pr-1 sm:pr-2">
 						<ServiceHealthIndicator />
+							{#if downloadClientConfigured}
+								<a href="/requests" class="sm:hidden btn btn-ghost btn-circle btn-md" aria-label="Requests">
+									<Inbox class="h-6 w-6" />
+								</a>
+							{/if}
 							<a href="/downloads" class="btn btn-ghost btn-circle btn-md" aria-label="Downloads">
 								<Download class="h-6 w-6" />
 							</a>
