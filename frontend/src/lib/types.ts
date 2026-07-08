@@ -1649,6 +1649,69 @@ export interface TrackTagUpdate {
 	musicbrainz_album_artist_id: string | null;
 }
 
+// Batch tag operations
+export interface TrackTagEntry {
+	file_id: string;
+	title: string | null;
+	artist: string | null;
+	album: string | null;
+	track_number: number | null;
+	album_artist: string | null;
+	disc_number: number | null;
+	year: number | null;
+	genre: string | null;
+}
+
+export interface TagDiffEntry {
+	field: string;
+	old_value?: string | null;
+	new_value?: string | null;
+}
+
+export interface BatchTagPreviewItem {
+	file_id: string;
+	file_path: string;
+	title: string;
+	diffs: TagDiffEntry[];
+}
+
+export interface BatchTagPreviewResponse {
+	items: BatchTagPreviewItem[];
+	total: number;
+}
+
+export interface BatchTagUpdateRequest {
+	tags: TrackTagEntry[];
+}
+
+export interface BatchTagUpdateResponse {
+	updated: number;
+	failed: number;
+	errors: { file_id: string; error: string }[];
+}
+
+// Genre management
+export interface GenreMapping {
+	raw_genre: string;
+	canonical_genre: string;
+	confidence: number;
+}
+
+export interface GenreAutoMapEntry {
+	raw_genre: string;
+	suggestions: { canonical: string; score: number }[];
+}
+
+export interface GenreTaxonomyCategory {
+	name: string;
+	genres: string[];
+}
+
+export interface GenreStatsEntry {
+	canonical_genre: string;
+	track_count: number;
+}
+
 export type UnmatchedResolution = 'accept' | 'reject' | 'manual_id';
 
 export interface LibraryActionResponse {

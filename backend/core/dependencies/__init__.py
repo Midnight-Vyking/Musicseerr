@@ -74,6 +74,7 @@ from .repo_providers import (  # noqa: F401
 
 from .service_providers import (  # noqa: F401
     get_audio_tagger,
+    get_tag_preview_service,
     get_naming_template_engine,
     get_musicbrainz_matcher,
     get_album_identifier,

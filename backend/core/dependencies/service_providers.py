@@ -60,6 +60,16 @@ def get_audio_tagger() -> "AudioTagger":
 
 
 @singleton
+def get_tag_preview_service() -> "TagPreviewService":
+    from services.tags.tag_preview_service import TagPreviewService
+
+    return TagPreviewService(
+        tagger=get_audio_tagger(),
+        library_db=get_library_db(),
+    )
+
+
+@singleton
 def get_naming_template_engine() -> "NamingTemplateEngine":
     from services.native.naming import NamingTemplateEngine
 

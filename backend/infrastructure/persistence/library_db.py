@@ -338,6 +338,24 @@ class LibraryDB(PersistenceBase):
         _safe_alter(
             conn, "ALTER TABLE library_artists ADD COLUMN related_artist_mbids TEXT"
         )
+        # Tag snapshots for undo/rollback of batch tag operations.
+        conn.execute(
+            """
+            CREATE TABLE IF NOT EXISTS tag_snapshots (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                file_id TEXT NOT NULL,
+                snapshot_json TEXT NOT NULL,
+                created_at INTEGER NOT NULL DEFAULT (unixepoch()),
+                batch_id TEXT NOT NULL
+            )
+            """
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_tag_snapshots_file ON tag_snapshots(file_id)"
+        )
+        conn.execute(
+            "CREATE INDEX IF NOT EXISTS idx_tag_snapshots_batch ON tag_snapshots(batch_id)"
+        )
 
     def _alter_library_albums(self, conn: sqlite3.Connection) -> None:
         """Scan-derived columns on library_albums; legacy columns stay in place

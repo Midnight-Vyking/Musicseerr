@@ -30,12 +30,13 @@
 	import PlexIcon from '$lib/components/PlexIcon.svelte';
 	import LibraryFormatBadge from '$lib/components/library/LibraryFormatBadge.svelte';
 	import LibraryTrackRow from '$lib/components/library/LibraryTrackRow.svelte';
-	import { ChevronDown, TriangleAlert, TrendingUp, Check } from 'lucide-svelte';
+	import { ChevronDown, TriangleAlert, TrendingUp, Check, Pencil } from 'lucide-svelte';
 	import { SvelteSet } from 'svelte/reactivity';
 	import type { LibraryFileMeta, DownloadTask, HeldImport } from '$lib/types';
 	import TrackRequestButton from '$lib/components/downloads/TrackRequestButton.svelte';
 	import TrackDownloadStatus from '$lib/components/downloads/TrackDownloadStatus.svelte';
 	import HeldTrackReview from '$lib/components/downloads/HeldTrackReview.svelte';
+	import TagBatchEditor from '$lib/components/library/TagBatchEditor.svelte';
 	import { integrationStore } from '$lib/stores/integration';
 	import { authStore } from '$lib/stores/authStore.svelte';
 	import { requestUpgradeTrack } from '$lib/queries/downloads/UpgradeQueries.svelte';
@@ -167,9 +168,90 @@
 			});
 		}
 	}
+
+	// Batch tag editing
+	const selectedFileIds = new SvelteSet<string>();
+	let batchEditing = $state(false);
+	let showCheckboxes = $state(false);
+
+	function toggleCheckbox(fileId: string) {
+		if (selectedFileIds.has(fileId)) selectedFileIds.delete(fileId);
+		else selectedFileIds.add(fileId);
+	}
+
+	function toggleSelectionMode() {
+		showCheckboxes = !showCheckboxes;
+		if (!showCheckboxes) selectedFileIds.clear();
+	}
+
+	function selectAllLibTracks() {
+		renderedTrackSections.forEach((section) =>
+			section.items.forEach((row) => {
+				const libMeta =
+					(row.track.recording_id
+						? libraryTracksByRecording.get(row.track.recording_id)
+						: undefined) ??
+					libraryTracksByPosition.get(
+						getDiscTrackKey({
+							disc_number: normalizeDiscNumber(row.track.disc_number),
+							track_number: row.track.position
+						})
+					);
+				if (libMeta) selectedFileIds.add(libMeta.id);
+			})
+		);
+	}
+
+	function getSelectedTracks(): LibraryFileMeta[] {
+		const result: LibraryFileMeta[] = [];
+		renderedTrackSections.forEach((section) =>
+			section.items.forEach((row) => {
+				const libMeta =
+					(row.track.recording_id
+						? libraryTracksByRecording.get(row.track.recording_id)
+						: undefined) ??
+					libraryTracksByPosition.get(
+						getDiscTrackKey({
+							disc_number: normalizeDiscNumber(row.track.disc_number),
+							track_number: row.track.position
+						})
+					);
+				if (libMeta && selectedFileIds.has(libMeta.id)) result.push(libMeta);
+			})
+		);
+		return result;
+	}
 </script>
 
 <div class="bg-base-200 rounded-box overflow-visible">
+	<!-- Batch edit toolbar (admin only, when in selection mode) -->
+	{#if authStore.isAdmin && libraryTracksByRecording.size + libraryTracksByPosition.size > 0}
+		<div class="flex items-center gap-2 px-3 sm:px-4 py-2 border-b border-base-300">
+			<button
+				class="btn btn-ghost btn-xs gap-1"
+				onclick={toggleSelectionMode}
+			>
+				<Pencil class="h-3.5 w-3.5" />
+				{showCheckboxes ? 'Cancel' : 'Batch edit tags'}
+			</button>
+			{#if showCheckboxes}
+				<button class="btn btn-ghost btn-xs" onclick={selectAllLibTracks}>
+					Select all
+				</button>
+				{#if selectedFileIds.size > 0}
+					<span class="text-xs text-base-content/60">
+						{selectedFileIds.size} track{selectedFileIds.size !== 1 ? 's' : ''} selected
+					</span>
+					<button
+						class="btn btn-primary btn-xs ml-auto"
+						onclick={() => (batchEditing = true)}
+					>
+						Edit tags
+					</button>
+				{/if}
+			{/if}
+		</div>
+	{/if}
 	<ul class="list">
 		{#each renderedTrackSections as section (section.discNumber)}
 			{#if renderedTrackSections.length > 1}
@@ -263,6 +345,14 @@
 					style={isCurrentlyPlaying ? `background-color: ${colors.accent}20;` : ''}
 				>
 					<div class="list-col-grow flex items-center gap-4 w-full">
+						{#if showCheckboxes && libMeta}
+							<input
+								type="checkbox"
+								class="checkbox checkbox-xs shrink-0"
+								checked={selectedFileIds.has(libMeta.id)}
+								onchange={() => toggleCheckbox(libMeta.id)}
+							/>
+						{/if}
 						<div
 							class="font-medium w-8 text-center shrink-0 {isCurrentlyPlaying
 								? ''
@@ -477,3 +567,17 @@
 		{/each}
 	</ul>
 </div>
+
+<!-- Batch tag editor modal (admin only) -->
+{#if authStore.isAdmin}
+	<TagBatchEditor
+		tracks={getSelectedTracks()}
+		releaseGroupMbid={releaseGroupMbid ?? album.musicbrainz_id}
+		bind:open={batchEditing}
+		onClose={() => {
+			batchEditing = false;
+			showCheckboxes = false;
+			selectedFileIds.clear();
+		}}
+	/>
+{/if}

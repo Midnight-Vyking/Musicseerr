@@ -196,6 +196,8 @@ export const API = {
 		reidentifyAlbum: (mbid: string) => `/api/v1/library/albums/${mbid}/reidentify`,
 		updateTrackTags: (fileId: string) => `/api/v1/library/tracks/${fileId}`,
 		trackTags: (fileId: string) => `/api/v1/library/tracks/${fileId}/tags`,
+		batchTagPreview: () => '/api/v1/library/tracks/tags/preview',
+		batchTagUpdate: () => '/api/v1/library/tracks/batch-tags',
 		removeTrack: (fileId: string) => `/api/v1/library/tracks/${fileId}`,
 		scanStart: () => '/api/v1/library/scan/start',
 		scanCancel: () => '/api/v1/library/scan/cancel',
@@ -210,6 +212,17 @@ export const API = {
 		removeAlbumPreview: (mbid: string) => `/api/v1/library/album/${mbid}/removal-preview`,
 		removeAlbum: (mbid: string) => `/api/v1/library/album/${mbid}`,
 		resolveTracks: () => '/api/v1/library/resolve-tracks'
+	},
+	genre: {
+		mappings: (raw?: string) =>
+			raw ? `/api/v1/genre/mappings?raw=${encodeURIComponent(raw)}` : '/api/v1/genre/mappings',
+		autoMap: () => '/api/v1/genre/mappings/auto-map',
+		applyAuto: () => '/api/v1/genre/mappings/apply-auto',
+		taxonomy: () => '/api/v1/genre/taxonomy',
+		categories: () => '/api/v1/genre/taxonomy/categories',
+		unmapped: () => '/api/v1/genre/unmapped',
+		stats: () => '/api/v1/genre/stats',
+		scan: () => '/api/v1/genre/scan'
 	},
 	search: {
 		artists: (query: string) => `/api/v1/search/artists?q=${encodeURIComponent(query)}`,

@@ -28,6 +28,7 @@ from core.dependencies import (
     get_library_manager,
     get_library_scanner,
     get_preferences_service,
+    get_tag_preview_service,
 )
 from core.exceptions import ExternalServiceError
 from infrastructure.msgspec_fastapi import MsgSpecRoute, MsgSpecBody
@@ -37,6 +38,13 @@ from services.album_service import AlbumService
 from services.library_service import LibraryService
 from services.native.library_manager import LibraryManager
 from services.native.library_scanner import LibraryScanner
+
+from api.v1.schemas.tags import (
+    BatchTagPreviewRequest,
+    BatchTagPreviewResponse,
+    BatchTagUpdateRequest,
+    BatchTagUpdateResponse,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -331,3 +339,27 @@ async def reidentify_native_album(
         )
     task.add_done_callback(_log_rescan_exception)
     return StatusMessageResponse(status="accepted", message="Album re-identify started")
+
+
+@router.post("/tracks/tags/preview", response_model=BatchTagPreviewResponse)
+async def preview_batch_tags(
+    current_user: CurrentAdminDep,
+    body: BatchTagPreviewRequest = MsgSpecBody(BatchTagPreviewRequest),
+    tag_preview = Depends(get_tag_preview_service),
+):
+    items = await tag_preview.preview_batch(body.tags)
+    return BatchTagPreviewResponse(items=items, total=len(items))
+
+
+@router.post("/tracks/batch-tags", response_model=BatchTagUpdateResponse)
+async def update_batch_tags(
+    current_user: CurrentAdminDep,
+    body: BatchTagUpdateRequest = MsgSpecBody(BatchTagUpdateRequest),
+    tag_preview = Depends(get_tag_preview_service),
+    scanner: LibraryScanner = Depends(get_library_scanner),
+):
+    if not body.confirm:
+        items = await tag_preview.preview_batch(body.tags)
+        return BatchTagUpdateResponse(updated=0, failed=0)
+
+    return await scanner.update_track_tags_batch(body.tags)

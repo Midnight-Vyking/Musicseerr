@@ -187,6 +187,36 @@ class LibraryScanner:
             raise ResourceNotFoundError("Library file not found")
         return updated
 
+    async def update_track_tags_batch(
+        self, entries: list["TrackTagEntry"]
+    ) -> "BatchTagUpdateResponse":
+        """Write a batch of admin-edited tags, returning per-entry status."""
+        from models.audio import AudioTag
+
+        from api.v1.schemas.tags import BatchTagUpdateResponse
+
+        updated = 0
+        failed = 0
+        errors: list[dict] = []
+        for entry in entries:
+            try:
+                new_tag = AudioTag(
+                    title=entry.title or "",
+                    artist=entry.artist or "",
+                    album=entry.album or "",
+                    track_number=entry.track_number or 0,
+                    album_artist=entry.album_artist,
+                    disc_number=entry.disc_number or 1,
+                    year=entry.year,
+                    genre=entry.genre,
+                )
+                await self.update_track_tags(entry.file_id, new_tag)
+                updated += 1
+            except Exception as exc:
+                failed += 1
+                errors.append({"file_id": entry.file_id, "error": str(exc)})
+        return BatchTagUpdateResponse(updated=updated, failed=failed, errors=errors)
+
     async def resolve_unmatched(
         self, review_id: int, resolution: str, mbid: str | None = None
     ) -> None:

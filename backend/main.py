@@ -40,6 +40,7 @@ from static_server import mount_frontend
 from api.v1.routes import (
     search, requests, library, status, covers, artists, albums, settings, home, discover, profile, playlists, following, wrapped
 )
+from api.v1.routes import genre_management
 from api.v1.routes import (
     discovery_batches as discovery_batches_routes
 )
@@ -697,6 +698,7 @@ v1_router.include_router(artists.router)
 v1_router.include_router(following.router)
 v1_router.include_router(albums.router)
 v1_router.include_router(settings.router)
+v1_router.include_router(genre_management.router)
 v1_router.include_router(home.router)
 v1_router.include_router(wrapped.router)
 # literal /discover/batches paths registered before the discover router (which owns

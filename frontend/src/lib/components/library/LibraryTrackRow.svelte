@@ -9,15 +9,32 @@
 	interface Props {
 		meta: LibraryFileMeta;
 		releaseGroupMbid: string;
+		showCheckbox?: boolean;
+		checked?: boolean;
+		onCheck?: (fileId: string) => void;
 	}
 
-	let { meta, releaseGroupMbid }: Props = $props();
+	let {
+		meta,
+		releaseGroupMbid,
+		showCheckbox = false,
+		checked = false,
+		onCheck
+	}: Props = $props();
 
 	let editing = $state(false);
 </script>
 
 <div class="bg-base-100/60 px-4 py-3 text-xs">
 	<div class="mb-2 flex flex-wrap items-center gap-2">
+		{#if showCheckbox}
+			<input
+				type="checkbox"
+				class="checkbox checkbox-xs"
+				checked={checked}
+				onchange={() => onCheck?.(meta.id)}
+			/>
+		{/if}
 		<AudioQualityBadge codec={meta.file_format} bitrate={meta.bit_rate} />
 		{#if meta.bit_depth && meta.sample_rate}
 			<span class="badge badge-ghost badge-xs font-mono">
