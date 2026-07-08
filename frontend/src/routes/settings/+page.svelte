@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { page } from '$app/state';
-	import { replaceState } from '$app/navigation';
+	import { replaceState, goto } from '$app/navigation';
 	import { onMount } from 'svelte';
 	import { fromStore } from 'svelte/store';
 	import { integrationStore } from '$lib/stores/integration';
@@ -52,7 +52,8 @@
 		HardDriveDownload,
 		Waypoints,
 		CalendarClock,
-		Gift
+		Gift,
+		Tags
 	} from 'lucide-svelte';
 	import JellyfinIcon from '$lib/components/JellyfinIcon.svelte';
 	import NavidromeIcon from '$lib/components/NavidromeIcon.svelte';
@@ -119,7 +120,8 @@
 			? [
 					{ id: 'users', label: 'Users', tier: 'system', icon: Users },
 					{ id: 'security', label: 'Security', tier: 'system', icon: ShieldCheck },
-					{ id: 'wrapped', label: 'Wrapped API', tier: 'system', icon: Gift }
+					{ id: 'wrapped', label: 'Wrapped API', tier: 'system', icon: Gift },
+					{ id: 'genre', label: 'Genre Mapping', tier: 'system', icon: Tags }
 				]
 			: []),
 		{ id: 'advanced', label: 'Advanced', tier: 'system', icon: Settings },
@@ -352,6 +354,8 @@
 					<SettingsWrapped />
 				{:else if activeTab === 'users' && authStore.isAdmin}
 					<SettingsUsers />
+				{:else if activeTab === 'genre' && authStore.isAdmin}
+					{@const _ = goto('/settings/genre')}
 				{/if}
 			</main>
 		</div>
