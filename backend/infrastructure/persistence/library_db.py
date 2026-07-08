@@ -1160,6 +1160,23 @@ class LibraryDB(PersistenceBase):
 
         return await self._read(operation)
 
+    async def update_file_path(self, file_id: str, new_path: str, new_size: int | None = None) -> None:
+        """Update the file_path (and optionally file_size_bytes) for a library file."""
+
+        def operation(conn: sqlite3.Connection) -> None:
+            if new_size is not None:
+                conn.execute(
+                    "UPDATE library_files SET file_path = ?, file_size_bytes = ? WHERE id = ?",
+                    (new_path, new_size, file_id),
+                )
+            else:
+                conn.execute(
+                    "UPDATE library_files SET file_path = ? WHERE id = ?",
+                    (new_path, file_id),
+                )
+
+        await self._write(operation)
+
     async def get_library_files_for_album(self, release_group_mbid: str) -> list[dict[str, Any]]:
         # stored lower-cased (see upsert_library_file / has_album_files), so normalize
         # the input the same way or a mixed-case MBID silently returns no rows

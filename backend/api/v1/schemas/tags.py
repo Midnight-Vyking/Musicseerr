@@ -50,3 +50,33 @@ class BatchTagUpdateResponse(AppStruct):
     updated: int
     failed: int
     errors: list[dict] = []
+
+
+# --- File rename from tags ---
+
+class FileRenamePreviewRequest(AppStruct):
+    file_ids: list[str]
+    template: str = "{albumartist}/{album} ({year})/{track:02d} - {title}.{ext}"
+
+
+class FileRenameItem(AppStruct):
+    file_id: str
+    title: str
+    old_path: str
+    new_path: str
+
+
+class FileRenamePreviewResponse(AppStruct):
+    items: list[FileRenameItem]
+    total: int
+
+
+class FileRenameApplyRequest(AppStruct):
+    file_ids: list[str]
+    template: str = "{albumartist}/{album} ({year})/{track:02d} - {title}.{ext}"
+
+
+class FileRenameApplyResponse(AppStruct):
+    renamed: int
+    failed: int
+    errors: list[dict] = []

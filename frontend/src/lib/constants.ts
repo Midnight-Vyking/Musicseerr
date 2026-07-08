@@ -224,6 +224,10 @@ export const API = {
 		stats: () => '/api/v1/genre/stats',
 		scan: () => '/api/v1/genre/scan'
 	},
+	fileRename: {
+		preview: () => '/api/v1/library/tracks/rename/preview',
+		apply: () => '/api/v1/library/tracks/rename/apply'
+	},
 	search: {
 		artists: (query: string) => `/api/v1/search/artists?q=${encodeURIComponent(query)}`,
 		albums: (query: string) => `/api/v1/search/albums?q=${encodeURIComponent(query)}`,
